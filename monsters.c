@@ -39,6 +39,14 @@ void Majorsummoning(int i) {
 	}
 }
 
+int find_monster(int perc) {
+        if ((rand() % 100) > perc) return 0;
+        fight(getmonster(corr(-1), 0), 0);
+	player.stealth = 0;
+	player.longevity = 0;
+	return(1);
+}
+
 int monster(int odds) {
 	int weight;
 

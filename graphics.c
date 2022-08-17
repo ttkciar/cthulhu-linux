@@ -7,28 +7,35 @@
  * This routine updates the changing information on the main data screen.
  */
 void upscreen(void) {
-	move(0,6);
-	printw("%s",cty[player.city].name);
-	move(1,12);
-	printw("%s",dclevel(corr(-1)));
-	move(2,7);
-	printw("%d",player.score);
-	move(3,0);
-	printw("%d ",player.body);
-	move(4,0);
-	printw("%d ",player.sanity);
-	move(5,0);
-	printw("%c%d ",'$',player.money);
-	move(6,0);
-	printw("%d ",player.str);
-	move(7,0);
-	printw("%d ",player.dex);
-	move(8,0);
-	printw("%d ",player.intel);
-	move(9,0);
-	printw("%d ",player.time/24 + 1);
-	move(10,0);
-	printw("%s ",(player.food == 0)?
+        int the_day  = player.time / 24 + 1;
+        int the_hour = player.time % 24;
+        char *corruption_name = dclevel(corr(-1));
+        char pad[8];
+        strcpy(pad, "  ");
+        if (strlen(corruption_name) > 6) pad[0] = (char)0;
+
+	move(0, 6);
+	printw("%s", cty[player.city].name);
+	move(1, 12);
+	printw("%s%s", dclevel(corr(-1)), pad);
+	move(2, 7);
+	printw("%d", player.score);
+	move(3, 0);
+	printw("%d/%d ", player.body, player.topbody);
+	move(4, 0);
+	printw("%d ", player.sanity);
+	move(5, 0);
+	printw("%c%d ", '$', player.money);
+	move(6, 0);
+	printw("%d ", player.str);
+	move(7, 0);
+	printw("%d ", player.dex);
+	move(8, 0);
+	printw("%d ", player.intel);
+	move(9, 0);
+	printw("%3d %02d ", the_day, the_hour);
+	move(10, 0);
+	printw("%s ", (player.food == 0)?
 	    "Healthy":(player.food>30)?"Starving":"Hungry");
 }
 
@@ -40,13 +47,13 @@ void fillscreen(void) {
 	addstr("City: \n");
 	addstr("Corruption: \n");
 	addstr("Score: \n");
-	addstr("      : Hit Points\n");
-	addstr("      : Sanity\n");
-	addstr("      : Money\n");
-	addstr("      : Strength\n");
-	addstr("      : Dexterity\n");
-	addstr("      : Knowledge\n");
-	addstr("      : Day\n");
+	addstr("          : Hit Points\n");
+	addstr("          : Sanity\n");
+	addstr("          : Money\n");
+	addstr("          : Strength\n");
+	addstr("          : Dexterity\n");
+	addstr("          : Knowledge\n");
+	addstr("          : Time\n");
 }
 
 /*
@@ -77,13 +84,13 @@ void composelist(char *str) {
         {
                 COUNT_DOWN (composelist, LINES - 4) 
                 {
-                        move(composelist, 20);
+                        move(composelist, 27);
                         clrtoeol();
                 }
         	composelist = 1;
                 return;
         }       
-	move(composelist % (LINES - 4), 20 + 20 * (composelist / (LINES - 4)));
+	move(composelist % (LINES - 4), 27 + 20 * (composelist / (LINES - 4)));
         clrtoeol();
         addstr(str);
         composelist++;

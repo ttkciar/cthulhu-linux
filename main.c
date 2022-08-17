@@ -61,7 +61,10 @@ void get_username(void) {
  */
 void playgame(void) {
 	char c;
-	static char bed = 0, library = 0, manlab = 0;
+	static char bed = 0;
+        static char library = 0;
+        static char manlab = 0;
+        static int  n_earn = 0;  // limits how long player works
 
 	if (bed == 0 && library == 0 && manlab == 0) 
 	{
@@ -88,6 +91,10 @@ void playgame(void) {
 			break;
 		case 'd': 
 			drink(); 
+			CthulhuClock(); 
+			break;
+		case 'e': 
+			eat_something(); 
 			CthulhuClock(); 
 			break;
 		case 't': 
@@ -133,7 +140,7 @@ void playgame(void) {
 			library = 1; 
 			break;
 		case 'f': 
-			monster(player.intel); 
+			find_monster(25);
 			CthulhuClock(); 
 			break;
 		case 'h': 
@@ -194,8 +201,12 @@ void playgame(void) {
 		    }
 	    }
 	} 
-	else if (manlab > 0) 
+	else if (manlab > 0) {
 	    EARN_MONEY();
+            // Don't let player work more than two weeks
+            n_earn++;
+            if (n_earn >= 14 * 24) manlab = 0;
+        }
 
 	if (CthulhuClock() > 0) 
 	{

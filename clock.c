@@ -40,6 +40,18 @@ void burntime(int hours) {
 		}
 }
 
+void eat_something(void) {
+        int longitude = cty[player.city].lon;
+
+        if (longitude > 360)        ask("nothing to eat here");
+        else if (player.money < 10) ask("can't afford to eat");
+        else if (player.food < 5)   ask("not that hungry");
+        else {
+                player.money -= 10;
+                player.food  -=  5;
+        }
+}
+
 /*
  * This is a cron-like subroutine that's called every hour. It ticks off
  * the time that the player's been in a certain area and then sicks a monster
